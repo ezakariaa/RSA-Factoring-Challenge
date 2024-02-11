@@ -1,58 +1,31 @@
-#!/usr/bin/env python3
-import math
-import random
+#!/usr/bin/python3
 
-def gcd(a, b):
-    while b:
-        a, b = b, a % b
-    return a
+import sys
 
-def simple_factorization(n):
-    for i in range(2, int(math.sqrt(n)) + 1):
-        if n % i == 0:
-            return n // i, i
-    return 1, n
 
-def pollard_rho(n):
-    if n % 2 == 0:
-        return 2
+def open_file(file_path):
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+    numbers = []
+    for line in lines:
+        numbers.append(int(line))
+    return numbers
 
-    x = random.randint(1, n-1)
-    y = x
-    c = random.randint(1, n-1)
-    d = 1
-
-    while d == 1:
-        x = (x*x + c) % n
-        y = (y*y + c) % n
-        y = (y*y + c) % n
-        d = gcd(abs(x-y), n)
-
-    return d
 
 def factorize(n):
-    if n < 10**10:  # Seuil pour utiliser la factorisation simple
-        p, q = simple_factorization(n)
-        if p != 1:
-            return p, q
+    for i in range(2, n):
+        if n == ((n // i) * i):
+            print("{}={}*{}".format(n, (n // i), i))
+            break
 
-    factor = pollard_rho(n)
-    if factor == n:
-        return 1, n
 
-    other_factor = n // factor
-    return max(factor, other_factor), min(factor, other_factor)
+def get_number(numbers_list):
+    for i in numbers_list:
+        factorize(i)
 
-def process_file(filename):
-    with open(filename, 'r') as file:
-        for line in file:
-            number = int(line.strip())
-            p, q = factorize(number)
-            print(f"{number}={p}*{q}")
 
-if __name__ == "__main__":
-    import sys
-    if len(sys.argv) != 2:
-        print("Usage: factors <file>")
-    else:
-        process_file(sys.argv[1])
+if len(sys.argv) == 2:
+    get_number(open_file(sys.argv[1]))
+else:
+    print("Usage: python factors.py <file>")
+    sys.exit(1)
