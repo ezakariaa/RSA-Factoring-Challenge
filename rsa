@@ -1,0 +1,21 @@
+#!/usr/bin/python3
+import sys
+
+try:
+    path_file = sys.argv[1]
+    with open(path_file) as file:
+        for nbr in file:
+            nbr = int(nbr)
+            if nbr % 2 == 0:
+                print("{}={}*{}".format(nbr, nbr // 2, 2))
+                continue
+            i = 3
+            while i <= nbr // 2:
+                if nbr % i == 0:
+                    print("{}={}*{}".format(nbr, nbr // i, i))
+                    break
+                i += 2
+            if i == (nbr // 2) + 1:
+                print("{}={}*{}".format(nbr, nbr, 1))
+except IndexError:
+    pass
